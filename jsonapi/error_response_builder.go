@@ -78,9 +78,11 @@ func (resp *ErrorResponse) AddError(id string, links []ErrorLink, status string,
 		Source: *source,
 	}
 
-	err := jsonError.addMeta(meta)
-	if err != nil {
-		return err
+	if meta != nil {
+		err := jsonError.addMeta(meta)
+		if err != nil {
+			return err
+		}
 	}
 
 	resp.Errors = append(resp.Errors, jsonError)

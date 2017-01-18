@@ -28,7 +28,7 @@ func TestCreateErrorResponse(t *testing.T) {
 		t.Error("Expected ErrorSource object, got nil!")
 	}
 
-	err := errResp.AddError("myid", links, "mystatus", "code", "title", "detail", errSource, any{"meta_id", "meta_name"})
+	err := errResp.AddError("myid", links, "mystatus", "code", "title", "detail", errSource, nil)
 	if err != nil {
 		t.Error("Found err:", err)
 		return
