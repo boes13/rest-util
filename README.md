@@ -21,3 +21,68 @@ func UserCheckHandler(w http.ResponseWriter, r *http.Request) {
   ....
 }
 ```
+### json
+```
+type meta struct {
+	id string
+	name string
+  ....
+}
+type data struct {
+	id      string
+	name    string
+	address string
+	phone   string
+  ....
+}
+
+func UserCheckHandler(w http.ResponseWriter, r *http.Request) {
+  ....
+  // error response
+  if err != nil {
+    errResp := CreateErrorResponse()
+    
+    // setup parameters to add JsonError object to ErrorResponse
+    urls := []string {
+      "http://host1.com/some_end_point", 
+      "http://host2.com/another_end_point"
+    }
+	  links := CreateErrorLinks(urls)
+    errSource := CreateErrorSource(r.URL.Path, "user_id")
+    err2 := errResp.AddError("some_id", links, "some_status", "some_code", "some_title", "some_detail", errSource, any{id:"meta_id", name:"meta_name",})
+	  if err2 != nil {
+      log.Fatalln("Found error:", err2)
+    }
+	  
+    // you may add other errors by repeating from // setup parameters to add JsonError object to ErrorResponse
+    ....
+    json.NewEncoder(w).Encode(errResp)
+    return
+  } else {
+    ....
+    // success response
+    dataResponse := CreateDataResponse()
+    err := dataResponse.SetMeta(meta{id:"some_id", name:"some_name",})
+    if err != nil {
+      log.Fatalln("Error adding meta to DataResponse:", err)
+    }
+    
+    // when response data is single
+    data1 := data{id:"my_id",address:"my_address",name:"my_name",phone:"my_phone",}
+    err = dataResponse.SetData(data1)
+    if err != nil {
+      log.Fatalln("Error setting data:", err)
+    }
+    
+    // when response data is array or slice
+    dataSlice := make([]data, 0)
+    dataSlice = append(dataSlice, data1)
+    err = dataResponse.SetData(dataSlice)
+    if err != nil {
+      log.Fatalln("Error setting data:", err)
+    }
+    json.NewEncoder(w).Encode(dataResponse)
+    return
+  }
+}
+```
