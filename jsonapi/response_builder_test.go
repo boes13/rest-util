@@ -23,7 +23,7 @@ func TestCreateDataResponse(t *testing.T) {
 		t.Error("Expected DataResponse object, got nil!")
 	}
 
-	err := dataResponse.AddMeta(meta{"field1 value", "field2 value"})
+	err := dataResponse.SetMeta(meta{"field1 value", "field2 value"})
 	if err != nil {
 		t.Error("Expected no error, got error!")
 	}

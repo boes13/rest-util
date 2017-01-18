@@ -57,10 +57,10 @@ func CreateDataResponse() *DataResponse {
 	return &dataResponse
 }
 
-// Add meta, non-standard information, to DataResponse object.
+// SetMeta sets the meta, non-standard information, to DataResponse object.
 // It requires argument of type struct or else it will return error.
 // It returns nil if successful.
-func (resp *DataResponse) AddMeta(meta interface{}) error {
+func (resp *DataResponse) SetMeta(meta interface{}) error {
 	kind := reflect.ValueOf(meta).Kind()
 	if kind != reflect.Struct {
 		return errors.New("Argument meta should be of type struct!")
