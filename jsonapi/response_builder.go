@@ -88,7 +88,7 @@ func (resp *DataResponse) SetData(data interface{}) error {
 				return errors.New(errMessage)
 			}
 		} else {
-			return errors.New(errMessage)
+			resp.Data = data
 		}
 	default:
 		return errors.New(errMessage)
