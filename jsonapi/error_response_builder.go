@@ -3,6 +3,8 @@ package jsonapi
 import (
 	"errors"
 	"reflect"
+	"strconv"
+	"net/http"
 )
 
 type ErrorResponse struct {
@@ -117,4 +119,13 @@ func (err *JsonError) addMeta(meta interface{}) error {
 	}
 	err.meta = meta
 	return nil
+}
+
+// Create simple http error response with only JsonapiVersion, ErrorSource, http status & title, and detail error.
+// Returns ErrorResponse object reference.
+func CreateSimpleHttpErrorResponse(errorUrl string, errorParameter string, httpError int, detailError string) *ErrorResponse {
+	errResponse := CreateErrorResponse()
+	errSource := CreateErrorSource(errorUrl, errorParameter)
+	errResponse.AddError("", nil, strconv.Itoa(httpError), "", http.StatusText(httpError), detailError, errSource, nil)
+	return errResponse
 }
