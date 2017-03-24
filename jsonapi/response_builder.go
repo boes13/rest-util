@@ -70,7 +70,7 @@ func (resp *DataResponse) SetMeta(meta interface{}) error {
 }
 
 // SetData sets the primary data of DataResponse object.
-// The parameter data should either be struct, or array/slice of struct.
+// The parameter data should either be struct, map, or array/slice of struct.
 // It returns error when the parameter type is invalid or else nil.
 func (resp *DataResponse) SetData(data interface{}) error {
 	kind := reflect.ValueOf(data).Kind()
@@ -78,6 +78,8 @@ func (resp *DataResponse) SetData(data interface{}) error {
 
 	switch {
 	case kind == reflect.Struct:
+		resp.Data = data
+	case kind == reflect.Map:
 		resp.Data = data
 	case kind == reflect.Array || kind == reflect.Slice:
 		value := reflect.ValueOf(data)

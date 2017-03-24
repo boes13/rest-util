@@ -1,20 +1,21 @@
 package jsonapi
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 )
 
 type meta struct {
-	field1 string
-	field2 string
+	Field1 string
+	Field2 string
 }
 
 type data struct {
-	id      string
-	name    string
-	address string
-	phone   string
+	Id      string
+	Name    string
+	Address string
+	Phone   string
 }
 
 func TestCreateDataResponse(t *testing.T) {
@@ -29,10 +30,10 @@ func TestCreateDataResponse(t *testing.T) {
 	}
 
 	mydata := data{
-		id:      "my_id",
-		address: "my_address",
-		name:    "my_name",
-		phone:   "my_phone",
+		Id:      "my_id",
+		Address: "my_address",
+		Name:    "my_name",
+		Phone:   "my_phone",
 	}
 	err = dataResponse.SetData(mydata)
 	if err != nil {
@@ -40,10 +41,10 @@ func TestCreateDataResponse(t *testing.T) {
 	}
 
 	mydata2 := data{
-		id:      "my_id2",
-		address: "my_address2",
-		name:    "my_name2",
-		phone:   "my_phone2",
+		Id:      "my_id2",
+		Address: "my_address2",
+		Name:    "my_name2",
+		Phone:   "my_phone2",
 	}
 	dataSlice := make([]data, 0)
 	dataSlice = append(dataSlice, mydata)
@@ -61,7 +62,20 @@ func TestCreateDataResponse(t *testing.T) {
 		t.Error("Expected no error, got error!")
 	}
 
+	var someMap = make(map[int]int)
+	someMap[100] = 10
+	someMap[12] = 12
+	err = dataResponse.SetData(someMap)
+	if err != nil {
+		t.Error("Expected no error, got error!")
+	}
+
 	dataResponse.SetLinks("www.self.com", "www.related.com", "www.first.com", "www.last.com", "www.prev.com", "www.next.com")
 
-	fmt.Printf("%+v", dataResponse)
+	buf, err := json.Marshal(dataResponse)
+	if err != nil {
+		t.Error("Expected no error, got error!")
+	}
+
+	fmt.Printf("%s", string(buf))
 }
