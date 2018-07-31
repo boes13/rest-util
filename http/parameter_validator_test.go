@@ -114,3 +114,26 @@ func TestValidateDateFormat(t *testing.T) {
 		}
 	}
 }
+
+type testValidJSONString struct {
+	paramValue    string
+	expectedValid bool
+	actualValid   bool
+}
+
+func TestIsValidJSONString(t *testing.T) {
+	testCases := []testValidJSONString{
+		{paramValue: "I still love my ex-girlfriend", expectedValid: false},
+		{paramValue: "{\"data\":\"bla bla bla\"}", expectedValid: true},
+		{paramValue: "{\"data\":{\"productID\":666,\"productName\":\"Jenglot\",\"productPrice\":45000,\"productPriceCurrency\":\"USD\"}}", expectedValid: true},
+		{paramValue: "{666}", expectedValid: false},
+		{paramValue: "{data:666}", expectedValid: false},
+		{paramValue: "{\"productIDs\":[123,234,345,456,567,678,789]}", expectedValid: true},
+	}
+	for _, test := range testCases {
+		test.actualValid = IsValidJSONString(test.paramValue)
+		if test.actualValid != test.expectedValid {
+			t.Error("Result JSON Validation mismatched. Expected : ", test.expectedValid, " But got ", test.actualValid)
+		}
+	}
+}

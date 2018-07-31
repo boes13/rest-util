@@ -2,6 +2,7 @@
 package http
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -52,4 +53,10 @@ func ValidateDateFormat(paramValue string, layout string) (time.Time, error) {
 		return time.Time{}, errors.New(message)
 	}
 	return t, nil
+}
+
+// IsValidJSONString validates if a string contains a valid JSON structure, which may be used as parameter.
+func IsValidJSONString(paramValue string) bool {
+	var temporaryJSONMap map[string]interface{}
+	return json.Unmarshal([]byte(paramValue), &temporaryJSONMap) == nil
 }
